@@ -1,0 +1,11 @@
+git pull// baixar atualizações do github
+git status// verificar status do ambiente local 
+git add// adiciona modificações para o ambiente de commit, podendo ser colocado ponto após o add para adicionar todas as modificações ou colocar apenas o nome da modificação para ser adiocionada
+git commit -m " "// fazer commit com comentario para estar pronto pra publicar
+git push// publica os commits para o servidor
+
+
+COMANDOS TERMINAL
+ls// exibe todos os arquivos na pasta
+cd nomecaminho// entra no caminho passado
+cd ..// volta umas pasta anterior

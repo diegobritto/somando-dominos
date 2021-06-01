@@ -34,7 +34,14 @@ def buscaConjuntos(arquivo):
     lista = open(arquivo,'r').read().split()
     listX = buscarTodosConjuntos(lista,0)
 #    print(listX[0])
-    print(validarSoma(listX[0], 0))
+    #print(validarSoma(listX[0], 0))
+    for item in listX:
+
+        retorno =somaMestre(item)
+        if retorno[0] != retorno[1]:
+            print("impossivel")
+        else:
+            print(retorno)
 
 #metodo soma
 def soma(lista):
@@ -44,6 +51,51 @@ def soma(lista):
         somaSuperior += conjunto[0]
         somaInferior += conjunto[1]
     return (somaSuperior, somaInferior)
+
+
+def somaMestre(lista):
+    sumLeft = 0
+    sumRight = 0
+    auxList = []    
+    for item in lista:
+        if len(auxList) == 0:
+            
+            if item[0]<item[1]:                        
+                sumLeft = item[0]
+                sumRight = item[1]
+                auxList.append((max(item)-min(item)))
+            else:
+                sumLeft = item[1]
+                sumRight = item[0]
+                auxList.append((max(item)-min(item)))
+        else:
+            
+           # print(item,(sumLeft) , (sumRight))                     
+            if (item[0]<item[1] and sumRight<=sumLeft) or (item[0]>item[1] and sumLeft<=sumRight):
+               # print(3,item, sumLeft,sumRight)
+                sumLeft = item[0]+sumLeft
+                sumRight = item[1]+sumRight
+                auxList.append((max(item)-min(item)))
+            else:                
+               # print(4,item, sumLeft,sumRight)
+                sumLeft = item[1]+sumLeft
+                sumRight = item[0]+sumRight
+                auxList.append((max(item)-min(item)))
+    #print(sumLeft, sumRight)
+    if sumLeft!= sumRight:
+       # print(lista)
+        diferenca  =(max(sumLeft,sumRight)-min(sumLeft,sumRight))
+        if diferenca in auxList:        
+            item = lista[auxList.index(diferenca)]        
+            a= max(sumLeft,sumRight)-max(item)
+            b = min(sumLeft,sumRight)-min(item)
+            sumLeft=a
+            sumRight =b
+
+    return sumLeft,sumRight
+
+
+
 
 def validarSoma(lista, dominoExcluido):
     x = soma(lista)
@@ -85,4 +137,4 @@ def dominoMenorSoma(lista):
             menor = x
     return menor
 
-buscaConjuntos('./in.txt')
+buscaConjuntos('./in3.txt')

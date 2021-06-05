@@ -5,13 +5,9 @@ def buscarTodosConjuntos(lista, indexQtdDominos):
     while buscando:
         if lista[indexQtdDominos] != '0':
             listaConjuntos.append(buscarProximoConjunto(lista,indexQtdDominos))
-
-
             indexQtdDominos = int(lista[indexQtdDominos]) * 2+1+indexQtdDominos
-
         else:
             buscando =False
-
     return listaConjuntos
 
 def buscarProximoConjunto(lista, indexQtdDominos):
@@ -33,33 +29,36 @@ def formataConjunto(dominos):
 def buscaConjuntos(arquivo):
     lista = open(arquivo,'r').read().split()
     listX = buscarTodosConjuntos(lista,0)
-#    print(listX[0])
+    #print(listX[0])
     #print(validarSoma(listX[0], 0))
     for item in listX:
 
-        retorno =somaMestre(item)
-        if retorno[0] != retorno[1]:
-            print("impossivel")
-        else:
-            print(retorno)
+        retorno = soma(item)
+        print(retorno)
+#        if retorno[0] != retorno[1]:
+#            print("impossivel")
+#        else:
+#            print(retorno)
 
 #metodo soma
 def soma(lista):
-    somaSuperior = 0
-    somaInferior = 0
+    somaMenores = 0
+    somaMaiores = 0
+    encontrouDiferenca = False
     for conjunto in lista:
-        somaSuperior += conjunto[0]
-        somaInferior += conjunto[1]
-    return (somaSuperior, somaInferior)
+        somaMenores += min(conjunto)
+        somaMaiores += max(conjunto)
+    diferenca = (somaMaiores - somaMenores)/2
+    return somaMaiores, somaMenores, diferenca
 
 
-def somaMestre(lista):
+'''def somaMestre(lista):
     sumLeft = 0
     sumRight = 0
     auxList = []    
     for item in lista:
         if len(auxList) == 0:
-            
+            print(item)
             if item[0]<item[1]:                        
                 sumLeft = item[0]
                 sumRight = item[1]
@@ -72,12 +71,12 @@ def somaMestre(lista):
             
            # print(item,(sumLeft) , (sumRight))                     
             if (item[0]<item[1] and sumRight<=sumLeft) or (item[0]>item[1] and sumLeft<=sumRight):
-               # print(3,item, sumLeft,sumRight)
+                print(3,item, sumLeft,sumRight)
                 sumLeft = item[0]+sumLeft
                 sumRight = item[1]+sumRight
                 auxList.append((max(item)-min(item)))
             else:                
-               # print(4,item, sumLeft,sumRight)
+                print(4,item, sumLeft,sumRight)
                 sumLeft = item[1]+sumLeft
                 sumRight = item[0]+sumRight
                 auxList.append((max(item)-min(item)))
@@ -85,14 +84,17 @@ def somaMestre(lista):
     if sumLeft!= sumRight:
        # print(lista)
         diferenca  =(max(sumLeft,sumRight)-min(sumLeft,sumRight))
-        if diferenca in auxList:        
+        if diferenca in auxList:
+
+
+
             item = lista[auxList.index(diferenca)]        
             a= max(sumLeft,sumRight)-max(item)
             b = min(sumLeft,sumRight)-min(item)
             sumLeft=a
             sumRight =b
 
-    return sumLeft,sumRight
+    return sumLeft,sumRight'''
 
 
 
@@ -137,4 +139,4 @@ def dominoMenorSoma(lista):
             menor = x
     return menor
 
-buscaConjuntos('./in3.txt')
+buscaConjuntos('./in2.txt')

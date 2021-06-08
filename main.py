@@ -188,4 +188,4 @@ def balanco(lista,diferenca, sumLeft,sumRight,houveExclusao):
             #print(3, diferenca)
     return sumLeft,sumRight
     
-buscaConjuntos('./in3.txt')
+buscaConjuntos('./in.txt')

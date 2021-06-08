@@ -26,18 +26,15 @@ def formataConjunto(dominos):
         i += 2
     return arrayDominos
 
-    #indexQtdDominos = int(lista[indexQtdDominos]) +1
+    
     primeiroDominoConjunto = indexQtdDominos+1
-    #formataConjunto(lista[1:int(lista[0]) * 2 + 1])
+    
 
 def buscaConjuntos(arquivo):
     lista = open(arquivo,'r').read().split()
-    listX = buscarTodosConjuntos(lista,0)
-#    print(listX[0])
-    #print(validarSoma(listX[0], 0))
-    for item in listX:
-
-        retorno =somaMestre(item)
+    listX = buscarTodosConjuntos(lista,0)        
+    for item in listX:        
+        retorno =somaMestre2(item)
         if retorno[0] != retorno[1]:
             print("impossivel")
         else:
@@ -51,48 +48,6 @@ def soma(lista):
         somaSuperior += conjunto[0]
         somaInferior += conjunto[1]
     return (somaSuperior, somaInferior)
-
-
-def somaMestre(lista):
-    sumLeft = 0
-    sumRight = 0
-    auxList = []    
-    for item in lista:
-        if len(auxList) == 0:
-            
-            if item[0]<item[1]:                        
-                sumLeft = item[0]
-                sumRight = item[1]
-                auxList.append((max(item)-min(item)))
-            else:
-                sumLeft = item[1]
-                sumRight = item[0]
-                auxList.append((max(item)-min(item)))
-        else:
-            
-           # print(item,(sumLeft) , (sumRight))                     
-            if (item[0]<item[1] and sumRight<=sumLeft) or (item[0]>item[1] and sumLeft<=sumRight):
-               # print(3,item, sumLeft,sumRight)
-                sumLeft = item[0]+sumLeft
-                sumRight = item[1]+sumRight
-                auxList.append((max(item)-min(item)))
-            else:                
-               # print(4,item, sumLeft,sumRight)
-                sumLeft = item[1]+sumLeft
-                sumRight = item[0]+sumRight
-                auxList.append((max(item)-min(item)))
-    #print(sumLeft, sumRight)
-    if sumLeft!= sumRight:
-       # print(lista)
-        diferenca  =(max(sumLeft,sumRight)-min(sumLeft,sumRight))
-        if diferenca in auxList:        
-            item = lista[auxList.index(diferenca)]        
-            a= max(sumLeft,sumRight)-max(item)
-            b = min(sumLeft,sumRight)-min(item)
-            sumLeft=a
-            sumRight =b
-
-    return sumLeft,sumRight
 
 
 
@@ -137,4 +92,100 @@ def dominoMenorSoma(lista):
             menor = x
     return menor
 
+def somaMestre(lista):
+    sumLeft = 0
+    sumRight = 0
+    auxList = []    
+    for item in lista:
+        if len(auxList) == 0:
+            
+            if item[0]<item[1]:                        
+                sumLeft = item[0]
+                sumRight = item[1]
+                auxList.append((max(item)-min(item)))
+            else:
+                sumLeft = item[1]
+                sumRight = item[0]
+                auxList.append((max(item)-min(item)))
+        else:
+            
+           # print(item,(sumLeft) , (sumRight))                     
+            if (item[0]<item[1] and sumRight<=sumLeft) or (item[0]>item[1] and sumLeft<=sumRight):
+               # print(3,item, sumLeft,sumRight)
+                sumLeft = item[0]+sumLeft
+                sumRight = item[1]+sumRight
+                auxList.append((max(item)-min(item)))
+            else:                
+               # print(4,item, sumLeft,sumRight)
+                sumLeft = item[1]+sumLeft
+                sumRight = item[0]+sumRight
+                auxList.append((max(item)-min(item)))
+    #print(sumLeft, sumRight)
+    if sumLeft!= sumRight:
+       # print(lista)
+        diferenca  =(max(sumLeft,sumRight)-min(sumLeft,sumRight))
+        if diferenca in auxList:        
+            item = lista[auxList.index(diferenca)]        
+            a= max(sumLeft,sumRight)-max(item)
+            b = min(sumLeft,sumRight)-min(item)
+            sumLeft=a
+            sumRight =b
+
+    return sumLeft,sumRight
+
+
+def somaMestre2(lista):
+    sumLeft = 0
+    sumRight = 0
+    auxList = []    
+    
+    for item in lista:                
+        sumLeft += max(item)
+        sumRight += min(item)
+        auxList.append((max(item)-min(item)))      
+    if sumLeft != sumRight:
+        diferenca = (sumLeft-sumRight)/2
+ #       print(diferenca)
+  #      print(auxList)  
+   #     print(sumLeft,sumRight)      
+        x = balanco(auxList,diferenca,sumLeft,sumRight,False)
+        sumLeft = x[0]
+        sumRight = x[1]
+
+#    else:
+        #print(sumLeft-sumRight)
+        
+
+    return sumLeft,sumRight
+
+def balanco(lista,diferenca, sumLeft,sumRight,houveExclusao):        
+    lista.sort()
+    lista.reverse()
+    if(min(lista)<diferenca):
+        for item in lista:
+            if item == diferenca:
+                sumLeft -=item
+                sumRight += item
+                return sumLeft,sumRight
+            if diferenca == 0.5 and (not houveExclusao) and item/2 ==0.5:            
+                lista.remove(item)   
+                #print(1,diferenca, lista,sumLeft,sumRight)
+                houveExclusao = True             
+                sumLeft -=item*2
+                sumRight -= item
+                diferenca -=item
+                #print(1,diferenca, lista,sumLeft,sumRight)
+                return sumLeft,sumRight
+            if item < diferenca:
+                diferenca -=item
+                sumLeft -=item
+                sumRight += item
+                #print(2, diferenca)
+        if sumLeft != sumRight:
+            x = balanco(lista,diferenca, sumLeft,sumRight,houveExclusao)
+            sumLeft = x[0]
+            sumRight = x[1]
+            #print(3, diferenca)
+    return sumLeft,sumRight
+    
 buscaConjuntos('./in3.txt')
